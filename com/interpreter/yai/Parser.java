@@ -1,18 +1,9 @@
 package com.interpreter.yai;
 
+import java.util.ArrayList;
 import java.util.List;
 
-/**
-    expression     → equality ;
-    equality       → comparison ( ( "!=" | "==" ) comparison )* ;
-    comparison     → addition ( ( ">" | ">=" | "<" | "<=" ) addition )* ;
-    addition       → multiplication ( ( "-" | "+" ) multiplication )* ;
-    multiplication → unary ( ( "/" | "*" ) unary )* ;
-    unary          → ( "!" | "-" ) unary
-                | primary ;
-    primary        → NUMBER | STRING | "false" | "true" | "nil"
-                | "(" expression ")" ;
- */
+
 class Parser {
     @SuppressWarnings("serial")
     private static class ParseError extends RuntimeException {}
@@ -24,12 +15,55 @@ class Parser {
         this.tokens = tokens;
     }
 
-    Expr parse() {
+    List<Stmt> parse() {
+        List<Stmt> statements = new ArrayList<>();
+        while(!isAtEnd()) {
+            statements.add(declaration());
+        }
+        return statements;
+    }
+
+    private Stmt declaration() {
         try {
-            return expression();
-        } catch(ParseError parseError) {
+            if(match(TokenType.VAR)) {
+                return varDeclaration();
+            }
+            return statement();
+        } catch(ParseError eParseError) {
+            synchronize();
             return null;
         }
+    }
+
+    private Stmt varDeclaration() {
+        Token name = consume(TokenType.IDENTIFIER, "Expect variable name.");
+
+        Expr initializer = null;
+        if(match(TokenType.EQUAL)) {
+            initializer = expression();
+        }
+
+        consume(TokenType.SEMICOLON, "Expect ';' after variable declaration.");
+        return new Stmt.Var(name, initializer);
+    }
+
+    private Stmt statement() {
+        if(match(TokenType.PRINT)) {
+            return printStatement();
+        }
+        return expressionStatement();
+    }
+
+    private Stmt expressionStatement() {
+        Expr expr = expression();
+        consume(TokenType.SEMICOLON, "Expect ';' after expression.");
+        return new Stmt.Expression(expr);
+    }
+
+    private Stmt printStatement() {
+        Expr value = expression();
+        consume(TokenType.SEMICOLON, "Expect ';' after value.");
+        return new Stmt.Print(value);
     }
 
     private Expr expression() {
@@ -104,6 +138,10 @@ class Parser {
             return new Expr.Literal(previous().literal);
         }
 
+        if(match(TokenType.IDENTIFIER)) {
+            return new Expr.Vairable(previous());
+        }
+
         if(match(TokenType.LEFT_PAREN)) {
             final Expr expr = expression();
             consume(TokenType.RIGHT_PAREN, "Expect ')' after expression.");
@@ -123,30 +161,30 @@ class Parser {
         return new ParseError();
     }
 
-    // private void synchronize() {
-    //     advance();
+    private void synchronize() {
+        advance();
 
-    //     while(!isAtEnd()) {
-    //         if(previous().type == TokenType.SEMICOLON) return;
+        while(!isAtEnd()) {
+            if(previous().type == TokenType.SEMICOLON) return;
 
-    //         switch(peek().type) {
-    //             case CLASS:
-    //             case FUN:
-    //             case VAR:
-    //             case FOR:
-    //             case IF:
-    //             case WHILE:
-    //             case PRINT:
-    //             case RETURN:
-    //                 return;
-    //             // TODO: this default is not in book
-    //             default:
-    //                 break;
-    //         }
+            switch(peek().type) {
+                case CLASS:
+                case FUN:
+                case VAR:
+                case FOR:
+                case IF:
+                case WHILE:
+                case PRINT:
+                case RETURN:
+                    return;
+                // TODO: this default is not in book
+                default:
+                    break;
+            }
 
-    //         advance();
-    //     }
-    // }
+            advance();
+        }
+    }
 
     private boolean match(final TokenType... types) {
         for(final TokenType type: types) {

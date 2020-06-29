@@ -1,19 +1,50 @@
 package com.interpreter.yai;
 
+import java.util.List;
+
 import com.interpreter.yai.Expr.Binary;
 import com.interpreter.yai.Expr.Grouping;
 import com.interpreter.yai.Expr.Literal;
 import com.interpreter.yai.Expr.Unary;
+import com.interpreter.yai.Expr.Vairable;
+import com.interpreter.yai.Stmt.Expression;
+import com.interpreter.yai.Stmt.Print;
+import com.interpreter.yai.Stmt.Var;
 
-class Interpreter implements Expr.Visitor<Object> {
+class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
+    private Environment environment = new Environment();
 
-    void interpret(Expr expression) {
+    void interpret(List<Stmt> statements) {
         try {
-            Object value = evaluate(expression);
-            System.out.println(stringify(value));
-        } catch(RuntimeError error) {
+            for (Stmt statement : statements) {
+                execute(statement);
+            }
+        } catch (RuntimeError error) {
             Yai.runtimeError(error);
         }
+    }
+
+    @Override
+    public Void visitExpressionStmt(Expression stmt) {
+        evaluate(stmt.expression);
+        return null;
+    }
+
+    @Override
+    public Void visitPrintStmt(Print stmt) {
+        Object value = evaluate(stmt.expression);
+        System.out.println(stringify(value));
+        return null;
+    }
+
+    @Override
+    public Void visitVarStmt(Var stmt) {
+        Object value = null;
+        if (stmt.initializer != null) {
+            value = evaluate(stmt.initializer);
+        }
+        environment.define(stmt.name.lexeme, value);
+        return null;
     }
 
     @Override
@@ -24,7 +55,7 @@ class Interpreter implements Expr.Visitor<Object> {
         // TODO: different from book,
         // in book this check is before each operation in below switch
         // I am creating a new switch
-        switch(expr.operator.type) {
+        switch (expr.operator.type) {
             case GREATER:
             case GREATER_EQUAL:
             case LESS:
@@ -37,38 +68,35 @@ class Interpreter implements Expr.Visitor<Object> {
                 break;
         }
 
-        switch(expr.operator.type) {
+        switch (expr.operator.type) {
             case GREATER:
-                return (double)left > (double)right;
+                return (double) left > (double) right;
             case GREATER_EQUAL:
-                return (double)left >= (double)right;
+                return (double) left >= (double) right;
             case LESS:
-                return (double)left < (double)right;
+                return (double) left < (double) right;
             case LESS_EQUAL:
-                return (double)left <= (double)right;
+                return (double) left <= (double) right;
             case BANG_EQUAL:
                 return !isEqual(left, right);
             case EQUAL_EQUAL:
                 return isEqual(left, right);
             case MINUS:
-                return (double)left - (double)right;
+                return (double) left - (double) right;
             case PLUS:
                 // TODO: what about the case of (String + double)
                 // Does yai handles this?
-                if(left instanceof Double && right instanceof Double) {
-                    return (double)left + (double)right;
+                if (left instanceof Double && right instanceof Double) {
+                    return (double) left + (double) right;
                 }
-                if(left instanceof String && right instanceof String) {
-                    return (String)left + (String)right;
+                if (left instanceof String && right instanceof String) {
+                    return (String) left + (String) right;
                 }
-                throw new RuntimeError(
-                    expr.operator,
-                    "Operands must be two Numbers or two Strings"
-                );
+                throw new RuntimeError(expr.operator, "Operands must be two Numbers or two Strings");
             case SLASH:
-                return (double)left / (double)right;
+                return (double) left / (double) right;
             case STAR:
-                return (double)left * (double) right;
+                return (double) left * (double) right;
             // TODO: the default is not in book
             default:
                 break;
@@ -92,12 +120,12 @@ class Interpreter implements Expr.Visitor<Object> {
     public Object visitUnaryExpr(Unary expr) {
         Object right = evaluate(expr.right);
 
-        switch(expr.operator.type) {
+        switch (expr.operator.type) {
             case BANG:
                 return !isTruthy(right);
             case MINUS:
                 checkNumberOperand(expr.operator, right);
-                return -(double)right;
+                return -(double) right;
             // TODO: this default is not in book
             default:
                 break;
@@ -105,6 +133,15 @@ class Interpreter implements Expr.Visitor<Object> {
 
         // Unreachable
         return null;
+    }
+
+    @Override
+    public Object visitVairableExpr(Vairable expr) {
+        return environment.get(expr.name);
+    }
+
+    private void execute(Stmt stmt) {
+        stmt.accept(this);
     }
 
     private Object evaluate(Expr expr) {
