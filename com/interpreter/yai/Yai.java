@@ -17,6 +17,9 @@ import java.util.List;
  */
 public class Yai {
     static boolean hadError = false;
+    static boolean hadRunTimeError = false;
+
+    private static final Interpreter interpreter = new Interpreter();
 
     public static void main(final String[] args) throws IOException {
         if (args.length > 1) {
@@ -35,6 +38,7 @@ public class Yai {
 
         // Indicate an error in the exit code
         if(hadError) System.exit(65);
+        if(hadRunTimeError) System.exit(70);
     }
 
     private static void runPrompt() throws IOException {
@@ -59,18 +63,35 @@ public class Yai {
         Scanner scanner = new Scanner(source);
         List<Token> tokens = scanner.scanTokens();
 
-        for(Token token: tokens) {
-            System.out.println(token);
-        }
-    }
+        Parser parser = new Parser(tokens);
+        Expr expression = parser.parse();
 
-    static void error(int line, String message) {
-        report(line, "", message);
+        // Stop if there was syntax error
+        if(hadError) return;
+
+        interpreter.interpret(expression);
     }
 
     private static void report(int line, String where, String message) {
         System.err.println(
             "[line " + line + "] Error " + where + ": " + message);
         hadError = true;
+    }
+
+    static void error(int line, String errorMessage) {
+        report(line, "", errorMessage);
+    }
+
+    static void error(Token token, String errorMessage) {
+        if(token.type == TokenType.EOF) {
+            report(token.line, " at end", errorMessage);
+        } else {
+            report(token.line, "'" + token.lexeme + "'", errorMessage);
+        }
+    }
+
+    static void runtimeError(RuntimeError error) {
+        System.err.println(error.getMessage() + "\n[Line " + error.token.line + "]");
+        hadRunTimeError = true;
     }
 }

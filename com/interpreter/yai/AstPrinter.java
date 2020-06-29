@@ -13,6 +13,8 @@ class AstPrinter implements Expr.Visitor<String> {
     /**
      * For the purpose of testing AstPrinter,
      * without parser
+     * 
+     * Expteced result: (* (- 123) (group 45.67))
      */
     public static void main(String[] args) {
         Expr expression = new Binary(
