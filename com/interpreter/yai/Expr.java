@@ -5,11 +5,27 @@ import java.util.List;
 abstract class Expr {
 
     interface Visitor<T> {
+        T visitAssignExpr(Assign expr);
         T visitBinaryExpr(Binary expr);
         T visitGroupingExpr(Grouping expr);
         T visitLiteralExpr(Literal expr);
         T visitUnaryExpr(Unary expr);
         T visitVairableExpr(Vairable expr);
+    }
+
+    static class Assign extends Expr {
+        final Token name;
+        final Expr value;
+
+        Assign(Token name, Expr value) {
+            this.name = name;
+            this.value = value;
+        }
+
+        @Override
+        <T> T accept(Visitor<T> visitor) {
+            return visitor.visitAssignExpr(this);
+        }
     }
 
     static class Binary extends Expr {

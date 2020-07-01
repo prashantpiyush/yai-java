@@ -5,9 +5,23 @@ import java.util.List;
 abstract class Stmt {
 
     interface Visitor<T> {
+        T visitBlockStmt(Block stmt);
         T visitExpressionStmt(Expression stmt);
         T visitPrintStmt(Print stmt);
         T visitVarStmt(Var stmt);
+    }
+
+    static class Block extends Stmt {
+        final List<Stmt> statements;
+
+        Block(List<Stmt> statements) {
+            this.statements = statements;
+        }
+
+        @Override
+        <T> T accept(Visitor<T> visitor) {
+            return visitor.visitBlockStmt(this);
+        }
     }
 
     static class Expression extends Stmt {

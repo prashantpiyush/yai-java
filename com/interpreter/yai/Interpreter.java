@@ -2,11 +2,13 @@ package com.interpreter.yai;
 
 import java.util.List;
 
+import com.interpreter.yai.Expr.Assign;
 import com.interpreter.yai.Expr.Binary;
 import com.interpreter.yai.Expr.Grouping;
 import com.interpreter.yai.Expr.Literal;
 import com.interpreter.yai.Expr.Unary;
 import com.interpreter.yai.Expr.Vairable;
+import com.interpreter.yai.Stmt.Block;
 import com.interpreter.yai.Stmt.Expression;
 import com.interpreter.yai.Stmt.Print;
 import com.interpreter.yai.Stmt.Var;
@@ -22,6 +24,12 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         } catch (RuntimeError error) {
             Yai.runtimeError(error);
         }
+    }
+
+    @Override
+    public Void visitBlockStmt(Block stmt) {
+        executeBlock(stmt.statements, new Environment(environment));
+        return null;
     }
 
     @Override
@@ -45,6 +53,14 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         }
         environment.define(stmt.name.lexeme, value);
         return null;
+    }
+
+    @Override
+    public Object visitAssignExpr(Assign expr) {
+        Object value = evaluate(expr.value);
+
+        environment.assign(expr.name, value);
+        return value;
     }
 
     @Override
@@ -92,7 +108,10 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
                 if (left instanceof String && right instanceof String) {
                     return (String) left + (String) right;
                 }
-                throw new RuntimeError(expr.operator, "Operands must be two Numbers or two Strings");
+                throw new RuntimeError(
+                    expr.operator,
+                    "Operands must be two Numbers or two Strings"
+                );
             case SLASH:
                 return (double) left / (double) right;
             case STAR:
@@ -142,6 +161,19 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
     private void execute(Stmt stmt) {
         stmt.accept(this);
+    }
+
+    private void executeBlock(List<Stmt> statements, Environment environment) {
+        Environment pervious = this.environment;
+        try {
+            this.environment = environment;
+
+            for(Stmt statement: statements) {
+                execute(statement);
+            }
+        } finally {
+            this.environment = pervious;
+        }
     }
 
     private Object evaluate(Expr expr) {
