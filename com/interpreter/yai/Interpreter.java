@@ -6,12 +6,15 @@ import com.interpreter.yai.Expr.Assign;
 import com.interpreter.yai.Expr.Binary;
 import com.interpreter.yai.Expr.Grouping;
 import com.interpreter.yai.Expr.Literal;
+import com.interpreter.yai.Expr.Logical;
 import com.interpreter.yai.Expr.Unary;
 import com.interpreter.yai.Expr.Vairable;
 import com.interpreter.yai.Stmt.Block;
 import com.interpreter.yai.Stmt.Expression;
+import com.interpreter.yai.Stmt.If;
 import com.interpreter.yai.Stmt.Print;
 import com.interpreter.yai.Stmt.Var;
+import com.interpreter.yai.Stmt.While;
 
 class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     private Environment environment = new Environment();
@@ -39,6 +42,16 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     }
 
     @Override
+    public Void visitIfStmt(If stmt) {
+        if(isTruthy(evaluate(stmt.condition))) {
+            execute(stmt.thenBranch);
+        } else if(stmt.elseBranch != null) {
+            execute(stmt.elseBranch);
+        }
+        return null;
+    }
+
+    @Override
     public Void visitPrintStmt(Print stmt) {
         Object value = evaluate(stmt.expression);
         System.out.println(stringify(value));
@@ -52,6 +65,14 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             value = evaluate(stmt.initializer);
         }
         environment.define(stmt.name.lexeme, value);
+        return null;
+    }
+
+    @Override
+    public Void visitWhileStmt(While stmt) {
+        while(isTruthy(evaluate(stmt.condition))) {
+            execute(stmt.body);
+        }
         return null;
     }
 
@@ -133,6 +154,19 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     @Override
     public Object visitLiteralExpr(Literal expr) {
         return expr.value;
+    }
+
+    @Override
+    public Object visitLogicalExpr(Logical expr) {
+        Object left = evaluate(expr.left);
+
+        if(expr.operator.type == TokenType.OR) {
+            if(isTruthy(left)) return left;
+        } else { // AND
+            if(!isTruthy(left)) return left;
+        }
+
+        return evaluate(expr.right);
     }
 
     @Override
