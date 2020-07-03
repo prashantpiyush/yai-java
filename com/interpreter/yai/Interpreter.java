@@ -1,7 +1,9 @@
 package com.interpreter.yai;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.interpreter.yai.Expr.Assign;
 import com.interpreter.yai.Expr.Binary;
@@ -22,6 +24,7 @@ import com.interpreter.yai.Stmt.While;
 class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     final Environment globals = new Environment();
     private Environment environment = globals;
+    private final Map<Expr, Integer> locals = new HashMap<>();
 
     Interpreter() {
         globals.define("clock", new YaiCallable() {
@@ -115,7 +118,13 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     public Object visitAssignExpr(Assign expr) {
         Object value = evaluate(expr.value);
 
-        environment.assign(expr.name, value);
+        Integer distance = locals.get(expr);
+        if(distance != null) {
+            environment.assignAt(distance, expr.name, value);
+        } else {
+            globals.assign(expr.name, value);
+        }
+
         return value;
     }
 
@@ -246,7 +255,16 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
     @Override
     public Object visitVairableExpr(Vairable expr) {
-        return environment.get(expr.name);
+        return lookupVariable(expr.name, expr);
+    }
+
+    private Object lookupVariable(Token name, Expr expr) {
+        Integer distance = locals.get(expr);
+        if(distance != null) {
+            return environment.getAt(distance, name.lexeme);
+        } else {
+            return globals.get(name);
+        }
     }
 
     private void execute(Stmt stmt) {
@@ -306,5 +324,9 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         }
 
         return object.toString();
+    }
+
+    void resolve(Expr expr, int depth) {
+        locals.put(expr, depth);
     }
 }
