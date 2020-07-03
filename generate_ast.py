@@ -106,6 +106,7 @@ def main():
     define_ast(output_dir, 'Expr', {
         'Assign': ['Token name', 'Expr value'],
         'Binary': ['Expr left', 'Token operator', 'Expr right'],
+        'Call': ['Expr callee', 'Token paren', 'List<Expr> arguments'],
         'Grouping': ['Expr expression'],
         'Literal': ['Object value'],
         'Logical': ['Expr left', 'Token operator', 'Expr right'],
@@ -117,6 +118,8 @@ def main():
         'Block': ['List<Stmt> statements'],
         'Expression': ['Expr expression'],
         'Print': ['Expr expression'],
+        'Function': ['Token name', 'List<Token> params', 'List<Stmt> body'],
+        'Return': ['Token keyword', 'Expr value'],
         'If': ['Expr condition', 'Stmt thenBranch', 'Stmt elseBranch'],
         'Var': ['Token name', 'Expr initializer'],
         'While': ['Expr condition', 'Stmt body']

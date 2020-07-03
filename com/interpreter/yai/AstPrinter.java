@@ -2,6 +2,7 @@ package com.interpreter.yai;
 
 import com.interpreter.yai.Expr.Assign;
 import com.interpreter.yai.Expr.Binary;
+import com.interpreter.yai.Expr.Call;
 import com.interpreter.yai.Expr.Grouping;
 import com.interpreter.yai.Expr.Literal;
 import com.interpreter.yai.Expr.Logical;
@@ -84,6 +85,12 @@ class AstPrinter implements Expr.Visitor<String> {
 
     @Override
     public String visitLogicalExpr(Logical expr) {
+        return null;
+    }
+
+    @Override
+    public String visitCallExpr(Call expr) {
+        // TODO Auto-generated method stub
         return null;
     }
 }

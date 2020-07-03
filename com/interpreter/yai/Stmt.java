@@ -8,6 +8,8 @@ abstract class Stmt {
         T visitBlockStmt(Block stmt);
         T visitExpressionStmt(Expression stmt);
         T visitPrintStmt(Print stmt);
+        T visitFunctionStmt(Function stmt);
+        T visitReturnStmt(Return stmt);
         T visitIfStmt(If stmt);
         T visitVarStmt(Var stmt);
         T visitWhileStmt(While stmt);
@@ -49,6 +51,38 @@ abstract class Stmt {
         @Override
         <T> T accept(Visitor<T> visitor) {
             return visitor.visitPrintStmt(this);
+        }
+    }
+
+    static class Function extends Stmt {
+        final Token name;
+        final List<Token> params;
+        final List<Stmt> body;
+
+        Function(Token name, List<Token> params, List<Stmt> body) {
+            this.name = name;
+            this.params = params;
+            this.body = body;
+        }
+
+        @Override
+        <T> T accept(Visitor<T> visitor) {
+            return visitor.visitFunctionStmt(this);
+        }
+    }
+
+    static class Return extends Stmt {
+        final Token keyword;
+        final Expr value;
+
+        Return(Token keyword, Expr value) {
+            this.keyword = keyword;
+            this.value = value;
+        }
+
+        @Override
+        <T> T accept(Visitor<T> visitor) {
+            return visitor.visitReturnStmt(this);
         }
     }
 
