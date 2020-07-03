@@ -13,7 +13,7 @@ $(BUILD_DIR)/%.class: %.java
 	@ printf "%8s %-60s %s\n" javac $< "$(JAVA_OPTIONS)"
 
 run: yai
-	cd build; java com.interpreter.yai.Yai
+	@ ./yai
 
 generate_ast:
 	$(PYTHON) generate_ast.py com/interpreter/yai
