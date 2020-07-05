@@ -8,9 +8,12 @@ import java.util.Map;
 import com.interpreter.yai.Expr.Assign;
 import com.interpreter.yai.Expr.Binary;
 import com.interpreter.yai.Expr.Call;
+import com.interpreter.yai.Expr.Get;
 import com.interpreter.yai.Expr.Grouping;
 import com.interpreter.yai.Expr.Literal;
 import com.interpreter.yai.Expr.Logical;
+import com.interpreter.yai.Expr.Set;
+import com.interpreter.yai.Expr.This;
 import com.interpreter.yai.Expr.Unary;
 import com.interpreter.yai.Expr.Vairable;
 import com.interpreter.yai.Stmt.Block;
@@ -58,6 +61,22 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     }
 
     @Override
+    public Void visitClassStmt(Stmt.Class stmt) {
+        environment.define(stmt.name.lexeme, null);
+
+        Map<String, YaiFunction> methods = new HashMap<>();
+        for(Stmt.Function method : stmt.methods) {
+            boolean isInit = method.name.lexeme.equals("init");
+            YaiFunction function = new YaiFunction(method, environment, isInit);
+            methods.put(method.name.lexeme, function);
+        }
+
+        YaiClass klass = new YaiClass(stmt.name.lexeme, methods);
+        environment.assign(stmt.name, klass);
+        return null;
+    }
+
+    @Override
     public Void visitExpressionStmt(Expression stmt) {
         evaluate(stmt.expression);
         return null;
@@ -65,7 +84,7 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
     @Override
     public Void visitFunctionStmt(Function stmt) {
-        YaiFunction function = new YaiFunction(stmt, environment);
+        YaiFunction function = new YaiFunction(stmt, environment, false);
         environment.define(stmt.name.lexeme, function);
         return null;
     }
@@ -212,6 +231,15 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     }
 
     @Override
+    public Object visitGetExpr(Get expr) {
+        Object object = evaluate(expr.object);
+        if(object instanceof YaiInstance) {
+            return ((YaiInstance)object).get(expr.name);
+        }
+        throw new RuntimeError(expr.name, "Only instances have properties.");
+    }
+
+    @Override
     public Object visitGroupingExpr(Grouping expr) {
         return evaluate(expr.expression);
     }
@@ -219,6 +247,24 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     @Override
     public Object visitLiteralExpr(Literal expr) {
         return expr.value;
+    }
+
+    @Override
+    public Object visitSetExpr(Set expr) {
+        Object object = evaluate(expr.object);
+        
+        if(!(object instanceof YaiInstance)) {
+            throw new RuntimeError(expr.name, "Only instances have fields.");
+        }
+
+        Object value = evaluate(expr.value);
+        ((YaiInstance)object).set(expr.name, value);
+        return value;
+    }
+
+    @Override
+    public Object visitThisExpr(This expr) {
+        return lookupVariable(expr.keyword, expr);
     }
 
     @Override

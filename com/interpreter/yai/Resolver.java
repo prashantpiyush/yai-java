@@ -8,9 +8,12 @@ import java.util.Stack;
 import com.interpreter.yai.Expr.Assign;
 import com.interpreter.yai.Expr.Binary;
 import com.interpreter.yai.Expr.Call;
+import com.interpreter.yai.Expr.Get;
 import com.interpreter.yai.Expr.Grouping;
 import com.interpreter.yai.Expr.Literal;
 import com.interpreter.yai.Expr.Logical;
+import com.interpreter.yai.Expr.Set;
+import com.interpreter.yai.Expr.This;
 import com.interpreter.yai.Expr.Unary;
 import com.interpreter.yai.Expr.Vairable;
 import com.interpreter.yai.Stmt.Block;
@@ -26,10 +29,18 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
     private final Interpreter interpreter;
     private final Stack<Map<String, Boolean>> scopes = new Stack<>();
     private FunctionType currentFunction = FunctionType.NONE;
+    private ClassType currentClass = ClassType.NONE;
 
     private enum FunctionType {
         NONE,
-        FUNCTION
+        FUNCTION,
+        INITIALIZER,
+        METHOD
+    }
+
+    private enum ClassType {
+        NONE,
+        CLASS
     }
 
     Resolver(Interpreter interpreter) {
@@ -43,6 +54,29 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
         endScope();
         return null;
     }
+
+    @Override
+	public Void visitClassStmt(Stmt.Class stmt) {
+        ClassType enclosingClassType = currentClass;
+        currentClass = ClassType.CLASS;
+        declare(stmt.name);
+        define(stmt.name);
+
+        beginScope();
+        scopes.peek().put("this", true);
+        
+        for(Stmt.Function method : stmt.methods) {
+            FunctionType declaration = FunctionType.METHOD;
+            if(method.name.lexeme.equals("init")) {
+                declaration = FunctionType.INITIALIZER;
+            }
+            resolveFunction(method, declaration);
+        }
+        
+        endScope();
+        currentClass = enclosingClassType;
+        return null;
+	}
 
     @Override
     public Void visitVarStmt(Var stmt) {
@@ -80,6 +114,9 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
             Yai.error(stmt.keyword, "Cannot return from top-level code.");
         }
         if(stmt.value != null) {
+            if(currentFunction == FunctionType.INITIALIZER) {
+                Yai.error(stmt.keyword, "Cannot return a value from an initializer.");
+            }
             resolve(stmt.value);
         }
         return null;
@@ -124,6 +161,12 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
     }
 
     @Override
+    public Void visitGetExpr(Get expr) {
+        resolve(expr.object);
+        return null;
+    }
+
+    @Override
     public Void visitGroupingExpr(Grouping expr) {
         resolve(expr.expression);
         return null;
@@ -138,6 +181,23 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
     public Void visitLogicalExpr(Logical expr) {
         resolve(expr.left);
         resolve(expr.right);
+        return null;
+    }
+
+    @Override
+    public Void visitSetExpr(Set expr) {
+        resolve(expr.value);
+        resolve(expr.object);
+        return null;
+    }
+
+    @Override
+    public Void visitThisExpr(This expr) {
+        if(currentClass == ClassType.NONE) {
+            Yai.error(expr.keyword, "Cannot use 'this' outside of class.");
+            return null;
+        }
+        resolveLocal(expr, expr.keyword);
         return null;
     }
 
@@ -183,6 +243,7 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
 
     private void resolveFunction(Function function, FunctionType type) {
         FunctionType enclosingFunction = currentFunction;
+        currentFunction = type;
         beginScope();
         for(Token param : function.params) {
             declare(param);

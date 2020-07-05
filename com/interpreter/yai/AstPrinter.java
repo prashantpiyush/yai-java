@@ -3,9 +3,12 @@ package com.interpreter.yai;
 import com.interpreter.yai.Expr.Assign;
 import com.interpreter.yai.Expr.Binary;
 import com.interpreter.yai.Expr.Call;
+import com.interpreter.yai.Expr.Get;
 import com.interpreter.yai.Expr.Grouping;
 import com.interpreter.yai.Expr.Literal;
 import com.interpreter.yai.Expr.Logical;
+import com.interpreter.yai.Expr.Set;
+import com.interpreter.yai.Expr.This;
 import com.interpreter.yai.Expr.Unary;
 import com.interpreter.yai.Expr.Vairable;
 
@@ -20,16 +23,8 @@ class AstPrinter implements Expr.Visitor<String> {
      * Expteced result: (* (- 123) (group 45.67))
      */
     public static void main(String[] args) {
-        Expr expression = new Binary(
-            new Unary(
-                new Token(TokenType.MINUS, "-", null, 1),
-                new Literal(123)
-            ),
-            new Token(
-                TokenType.STAR, "*", null, 1),
-                new Grouping(new Literal(45.67)
-            )
-        );
+        Expr expression = new Binary(new Unary(new Token(TokenType.MINUS, "-", null, 1), new Literal(123)),
+                new Token(TokenType.STAR, "*", null, 1), new Grouping(new Literal(45.67)));
         System.out.println(new AstPrinter().print(expression));
     }
 
@@ -90,6 +85,21 @@ class AstPrinter implements Expr.Visitor<String> {
 
     @Override
     public String visitCallExpr(Call expr) {
+        return null;
+    }
+
+    @Override
+    public String visitGetExpr(Get expr) {
+        return null;
+    }
+
+    @Override
+    public String visitSetExpr(Set expr) {
+        return null;
+    }
+
+    @Override
+    public String visitThisExpr(This expr) {
         // TODO Auto-generated method stub
         return null;
     }
