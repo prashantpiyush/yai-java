@@ -5,16 +5,21 @@ import java.util.Map;
 
 class YaiClass implements YaiCallable {
     final String name;
+    final YaiClass superclass;
     private final Map<String, YaiFunction> methods;
 
-    YaiClass(String name, Map<String, YaiFunction> methods) {
+    YaiClass(String name, YaiClass superclass, Map<String, YaiFunction> methods) {
         this.name = name;
+        this.superclass = superclass;
         this.methods = methods;
     }
 
     YaiFunction findMethod(String name) {
         if(methods.containsKey(name)) {
             return methods.get(name);
+        }
+        if(superclass != null) {
+            return superclass.findMethod(name);
         }
         return null;
     }
