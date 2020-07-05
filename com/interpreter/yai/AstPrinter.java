@@ -10,7 +10,7 @@ import com.interpreter.yai.Expr.Logical;
 import com.interpreter.yai.Expr.Set;
 import com.interpreter.yai.Expr.This;
 import com.interpreter.yai.Expr.Unary;
-import com.interpreter.yai.Expr.Vairable;
+import com.interpreter.yai.Expr.Variable;
 
 /**
  * Prints string representation of AST nodes
@@ -23,8 +23,12 @@ class AstPrinter implements Expr.Visitor<String> {
      * Expteced result: (* (- 123) (group 45.67))
      */
     public static void main(String[] args) {
-        Expr expression = new Binary(new Unary(new Token(TokenType.MINUS, "-", null, 1), new Literal(123)),
-                new Token(TokenType.STAR, "*", null, 1), new Grouping(new Literal(45.67)));
+        Expr expression = new Binary(
+            new Unary(
+                new Token(TokenType.MINUS, "-", null, 1),
+                new Literal(123)),
+            new Token(TokenType.STAR, "*", null, 1), 
+            new Grouping(new Literal(45.67)));
         System.out.println(new AstPrinter().print(expression));
     }
 
@@ -74,7 +78,7 @@ class AstPrinter implements Expr.Visitor<String> {
     }
 
     @Override
-    public String visitVairableExpr(Vairable expr) {
+    public String visitVariableExpr(Variable expr) {
         return null;
     }
 

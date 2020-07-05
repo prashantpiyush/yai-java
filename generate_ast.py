@@ -114,7 +114,7 @@ def main():
         'Set': ['Expr object', 'Token name', 'Expr value'],
         'This': ['Token keyword'],
         'Unary': ['Token operator', 'Expr right'],
-        'Vairable': ['Token name']
+        'Variable': ['Token name']
     })
 
     define_ast(output_dir, 'Stmt', {

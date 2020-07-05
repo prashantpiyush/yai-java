@@ -15,7 +15,7 @@ import com.interpreter.yai.Expr.Logical;
 import com.interpreter.yai.Expr.Set;
 import com.interpreter.yai.Expr.This;
 import com.interpreter.yai.Expr.Unary;
-import com.interpreter.yai.Expr.Vairable;
+import com.interpreter.yai.Expr.Variable;
 import com.interpreter.yai.Stmt.Block;
 import com.interpreter.yai.Stmt.Expression;
 import com.interpreter.yai.Stmt.Function;
@@ -208,7 +208,7 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
     }
 
     @Override
-    public Void visitVairableExpr(Vairable expr) {
+    public Void visitVariableExpr(Variable expr) {
         if(!scopes.isEmpty() && scopes.peek().get(expr.name.lexeme) == Boolean.FALSE) {
             Yai.error(expr.name, "Cannot read local variable in its own initializer.");
         }

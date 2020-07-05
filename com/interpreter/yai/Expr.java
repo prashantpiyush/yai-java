@@ -15,7 +15,7 @@ abstract class Expr {
         T visitSetExpr(Set expr);
         T visitThisExpr(This expr);
         T visitUnaryExpr(Unary expr);
-        T visitVairableExpr(Vairable expr);
+        T visitVariableExpr(Variable expr);
     }
 
     static class Assign extends Expr {
@@ -170,16 +170,16 @@ abstract class Expr {
         }
     }
 
-    static class Vairable extends Expr {
+    static class Variable extends Expr {
         final Token name;
 
-        Vairable(Token name) {
+        Variable(Token name) {
             this.name = name;
         }
 
         @Override
         <T> T accept(Visitor<T> visitor) {
-            return visitor.visitVairableExpr(this);
+            return visitor.visitVariableExpr(this);
         }
     }
 

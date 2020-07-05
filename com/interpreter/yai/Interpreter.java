@@ -15,7 +15,7 @@ import com.interpreter.yai.Expr.Logical;
 import com.interpreter.yai.Expr.Set;
 import com.interpreter.yai.Expr.This;
 import com.interpreter.yai.Expr.Unary;
-import com.interpreter.yai.Expr.Vairable;
+import com.interpreter.yai.Expr.Variable;
 import com.interpreter.yai.Stmt.Block;
 import com.interpreter.yai.Stmt.Expression;
 import com.interpreter.yai.Stmt.Function;
@@ -300,7 +300,7 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     }
 
     @Override
-    public Object visitVairableExpr(Vairable expr) {
+    public Object visitVariableExpr(Variable expr) {
         return lookupVariable(expr.name, expr);
     }
 

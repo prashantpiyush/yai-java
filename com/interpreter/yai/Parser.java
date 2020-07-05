@@ -221,8 +221,8 @@ class Parser {
             Token equals = previous();
             Expr value = assignment();
             
-            if(expr instanceof Expr.Vairable) {
-                Token name = ((Expr.Vairable)expr).name;
+            if(expr instanceof Expr.Variable) {
+                Token name = ((Expr.Variable)expr).name;
                 return new Expr.Assign(name, value);
             } else if(expr instanceof Expr.Get) {
                 Expr.Get get = (Expr.Get)expr;
@@ -362,7 +362,7 @@ class Parser {
         }
 
         if(match(TokenType.IDENTIFIER)) {
-            return new Expr.Vairable(previous());
+            return new Expr.Variable(previous());
         }
 
         if(match(TokenType.LEFT_PAREN)) {
