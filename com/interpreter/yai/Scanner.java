@@ -70,6 +70,19 @@ class Scanner {
                 if(match('/')) {
                     // A comment goes until end of line
                     while(!isAtEnd() && peek() != '\n') advance();
+                } else if(match('*')) {
+                    boolean closed = false;
+                    while(!isAtEnd()) {
+                        if(match('*') && peek() == '/') {
+                            advance();
+                            closed = true;
+                            break;
+                        }
+                        advance();
+                    }
+                    if(!closed) {
+                        Yai.error(line, "Unclosed comment.");
+                    }
                 } else {
                     addToken(TokenType.SLASH);
                 }
