@@ -1,0 +1,23 @@
+class A {
+    method(arg) {
+        print "A.method " + arg; 
+    }
+}
+
+class B < A {
+    getClosure() {
+        return super.method;
+    }
+
+    method(arg) {
+        print "B.method " + arg; 
+    }
+}
+
+var c = B().getClosure();
+c("foo");
+
+/*
+// stdout
+A.method foo
+*/

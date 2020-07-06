@@ -1,0 +1,30 @@
+print 1 < 2;
+print 2 < 2;
+print 2 <= 3;
+print 7 <= 7;
+
+print 3 > 5;
+print 3 > 3;
+print 9 >= 100;
+print 9 >= 6;
+
+print -0 < 0;
+print 0 > -0;
+print 0 <= -0;
+print -0 >= -0;
+
+/*
+// stdout
+true
+false
+true
+true
+false
+false
+false
+true
+false
+false
+true
+true
+*/

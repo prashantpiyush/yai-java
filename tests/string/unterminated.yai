@@ -1,0 +1,6 @@
+"this string isn't closedetehtere
+
+/*
+// stderr
+[Line 6] Error : Unterminated String.
+*/

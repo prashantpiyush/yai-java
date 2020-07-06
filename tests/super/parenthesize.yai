@@ -1,0 +1,18 @@
+class A {
+    foo() {
+        print "in A";
+    }
+}
+
+class B < A {
+    init() {
+        (super).foo();
+    }
+}
+
+B();
+
+/*
+// stderr
+[Line 9] Error at ')': Expect '.' after 'super'.
+*/

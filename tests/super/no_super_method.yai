@@ -1,0 +1,15 @@
+class A {}
+
+class B < A {
+    init() {
+        super.foo();
+    }
+}
+
+B();
+
+/*
+// stderr
+Undefined property 'foo'.
+[Line 5]
+*/

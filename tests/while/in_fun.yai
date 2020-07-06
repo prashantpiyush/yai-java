@@ -1,0 +1,28 @@
+fun foo() {
+    while(true) {
+        return "foo";
+    }
+}
+print foo();
+
+fun bar() {
+    var i=0;
+    while(true) {
+        print i;
+        if(i>=2) {
+            return;
+        }
+        i = i + 1;
+    }
+}
+print bar();
+
+
+/*
+// stdout
+foo
+0
+1
+2
+nil
+*/

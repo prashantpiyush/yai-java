@@ -1,0 +1,17 @@
+
+for(var i=0; i>100; ) {
+    print "bat";
+}
+
+for(; false; ) {
+    print "bat";
+}
+
+for(; false; ) for(; false; ) {
+    print "foo";
+}
+
+for(;false;) for(;;) print 1;
+
+/*
+*/

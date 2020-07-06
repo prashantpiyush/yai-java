@@ -1,0 +1,13 @@
+
+while(false) {
+    print "bat";
+}
+
+while(false) for(; true; ) {
+    print "foo";
+}
+
+while(false) for(;false;) print 1;
+
+/*
+*/

@@ -1,0 +1,7 @@
+print "kick" + nil;
+
+/*
+// stderr
+Operands must be two Numbers or two Strings
+[Line 1]
+*/

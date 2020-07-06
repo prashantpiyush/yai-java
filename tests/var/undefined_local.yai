@@ -1,0 +1,9 @@
+{
+    print a;
+}
+
+/*
+// stderr
+Undefined variable 'a'.
+[Line 2]
+*/

@@ -1,0 +1,15 @@
+class Foo {}
+
+fun bar() {
+    print "bar";
+}
+
+var foo = Foo();
+foo.bar = 5;
+foo.bar();
+
+/*
+// stderr
+Can only call functions and classes.
+[Line 9]
+*/

@@ -1,0 +1,25 @@
+fun foo() {}
+
+fun
+foo2
+()
+{}
+
+fun foo3() {return 5;}
+
+fun foo4() {
+    fun foo5() {
+        fun foo6() {
+            print "inner";
+        }
+        return foo6;
+    }
+    return foo5;
+}
+var x = foo4();
+x()();
+
+/*
+// stdout
+inner
+*/

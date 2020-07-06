@@ -1,0 +1,6 @@
+print;
+
+/*
+// stderr
+[Line 1] Error at ';': Expect expression.
+*/

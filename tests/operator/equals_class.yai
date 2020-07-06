@@ -1,0 +1,25 @@
+class A {}
+class B {}
+
+fun foo() {}
+fun bar() {}
+
+print A == A;
+print B == B;
+print A == B;
+
+print A == foo;
+print B == "152342";
+print A == "stringdf";
+print A == nil;
+
+/*
+// stdout
+true
+true
+false
+false
+false
+false
+false
+*/

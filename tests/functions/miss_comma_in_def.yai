@@ -1,0 +1,6 @@
+fun foo(a, b c) {}
+
+/*
+// stderr
+[Line 1] Error at 'c': Expect ')' after parameters.
+*/

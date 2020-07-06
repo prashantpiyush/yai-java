@@ -1,0 +1,10 @@
+fun foo() {
+    print "foo";
+}
+foo.bar = "bat";
+
+/*
+// stderr
+Only instances have fields.
+[Line 4]
+*/

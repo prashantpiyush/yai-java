@@ -1,0 +1,8 @@
+{
+    var a = a;
+}
+
+/*
+// stderr
+[Line 2] Error at 'a': Cannot read local variable in its own initializer.
+*/

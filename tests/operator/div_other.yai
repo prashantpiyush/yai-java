@@ -1,0 +1,7 @@
+print "1"/1;
+
+/*
+// stderr
+Operands must be a number.
+[Line 1]
+*/

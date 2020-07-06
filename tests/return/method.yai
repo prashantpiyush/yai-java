@@ -1,0 +1,22 @@
+class Foo {
+    method() {
+        return "ok";
+        print "bad";
+    }
+}
+print Foo().method();
+
+class Bar {
+    method() {
+        return;
+        print "bad";
+    }
+}
+print Bar().method();
+
+
+/*
+// stdout
+ok
+nil
+*/

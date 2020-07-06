@@ -1,0 +1,6 @@
+fun f() var x = 5;
+
+/*
+// stderr
+[Line 1] Error at 'var': Expect '{' before function body.
+*/

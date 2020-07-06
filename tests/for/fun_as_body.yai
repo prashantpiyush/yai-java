@@ -1,0 +1,7 @@
+for(;;)
+    fun foo() {}
+
+/*
+// stderr
+[Line 2] Error at 'fun': Expect expression.
+*/

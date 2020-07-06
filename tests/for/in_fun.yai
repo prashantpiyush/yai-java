@@ -1,0 +1,27 @@
+fun foo() {
+    for(;;) {
+        return "foo";
+    }
+}
+print foo();
+
+fun bar() {
+    for(var i=0; ;) {
+        print i;
+        if(i>=2) {
+            return;
+        }
+        i = i + 1;
+    }
+}
+print bar();
+
+
+/*
+// stdout
+foo
+0
+1
+2
+nil
+*/

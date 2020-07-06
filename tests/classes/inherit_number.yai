@@ -1,0 +1,6 @@
+class B < 124 {}
+
+/*
+// stderr
+[Line 1] Error at '124': Expect superclass name.
+*/

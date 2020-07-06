@@ -1,0 +1,34 @@
+fun foo() {}
+fun bar() {}
+
+class A {
+    baz() {
+        // nop
+    }
+}
+
+var a = A();
+a.bar = bar;
+
+var baz = a.baz;
+
+print foo == foo;
+print foo == bar;
+print a.bar == bar;
+
+print baz == a.baz;
+print baz == baz;
+
+// not equal because binding of "this" happens before call
+// creates a new YaiFunction object
+print a.baz == a.baz;
+
+/*
+// stdout
+true
+false
+true
+false
+true
+false
+*/

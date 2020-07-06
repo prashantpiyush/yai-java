@@ -1,0 +1,6 @@
+class B < nil {}
+
+/*
+// stderr
+[Line 1] Error at 'nil': Expect superclass name.
+*/

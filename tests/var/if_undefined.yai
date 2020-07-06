@@ -1,0 +1,10 @@
+if(false) {
+    print a;
+}
+
+print "ok";
+
+/*
+// stdout
+ok
+*/

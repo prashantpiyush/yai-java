@@ -1,0 +1,10 @@
+fun foo() {
+    print foo;
+}
+
+foo();
+
+/*
+// stdout
+<fn foo>
+*/

@@ -1,0 +1,26 @@
+fun foo() {
+    return "foo";
+}
+
+fun bar() {
+    print "bar";
+    return "bar";
+}
+
+fun baz() {
+    print "baz";
+    return nil;
+}
+
+print true and false or foo();
+
+print baz() or bar() and bar();
+
+/*
+// stdout
+foo
+baz
+bar
+bar
+bar
+*/

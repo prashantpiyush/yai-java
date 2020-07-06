@@ -1,0 +1,14 @@
+
+var i = 0;
+while(i<3) {
+    print i;
+    if(i>=2) i = 100;
+    else i = i + 1;
+}
+
+/*
+// stdout
+0
+1
+2
+*/

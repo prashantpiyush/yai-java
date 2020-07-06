@@ -1,0 +1,6 @@
+fun func(a, a) {}
+
+/*
+// stderr
+[Line 1] Error at 'a': Variable with this name already declared in this scope.
+*/

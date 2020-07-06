@@ -1,0 +1,20 @@
+class Foo {
+    getClosure() {
+        fun closure() {
+            return this.toString();
+        }
+        return closure;
+    }
+
+    toString() {
+        return "Foo";
+    }
+}
+
+var c = Foo().getClosure();
+print c();
+
+/*
+// stdout
+Foo
+*/

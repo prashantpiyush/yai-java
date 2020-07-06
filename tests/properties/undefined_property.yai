@@ -1,0 +1,10 @@
+class Foo {}
+var foo = Foo();
+
+foo.bar;
+
+/*
+// stderr
+Undefined property 'bar'.
+[Line 4]
+*/

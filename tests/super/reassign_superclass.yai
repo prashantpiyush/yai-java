@@ -1,0 +1,28 @@
+class A {
+    foo() {
+        print "A.foo";
+    }
+}
+
+class B < A {
+    foo() {
+        super.foo();
+    }
+}
+
+class C {
+    foo() {
+        print "C.foo";
+    }
+}
+
+var b = B();
+b.foo();
+A = C;
+b.foo();
+
+/*
+// stdout
+A.foo
+A.foo
+*/

@@ -1,0 +1,7 @@
+nil > "foo";
+
+/*
+// stderr
+Operands must be a number.
+[Line 1]
+*/

@@ -1,0 +1,9 @@
+class A {}
+
+print A.foo;
+
+/*
+// stderr
+Only instances have properties.
+[Line 3]
+*/

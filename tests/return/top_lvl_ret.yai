@@ -1,0 +1,6 @@
+return "can't";
+
+/*
+// stderr
+[Line 1] Error at 'return': Cannot return from top-level code.
+*/

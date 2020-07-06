@@ -1,0 +1,8 @@
+print 100 + 100;
+print "str" + "ing";
+
+/*
+// stdout
+200
+string
+*/

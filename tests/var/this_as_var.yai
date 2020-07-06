@@ -1,0 +1,6 @@
+var this = "foo";
+
+/*
+// stderr
+[Line 1] Error at 'this': Expect variable name.
+*/

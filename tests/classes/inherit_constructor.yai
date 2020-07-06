@@ -1,0 +1,14 @@
+class A {
+    init(param) {
+        this.field = param;
+    }
+}
+class B < A {}
+
+var b = B("foo");
+print b.field;
+
+/*
+// stdout
+foo
+*/

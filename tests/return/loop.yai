@@ -1,0 +1,19 @@
+fun f(a) {
+    if(a==1) {
+        while(true) return "yes";
+    } else {
+        for(;;) {
+            return "no";
+        }
+    }
+    print "bad";
+}
+
+print f(1);
+print f(2);
+
+/*
+// stdout
+yes
+no
+*/

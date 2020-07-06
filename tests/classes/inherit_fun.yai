@@ -1,0 +1,11 @@
+fun foo() {
+    // nop
+}
+
+class A < foo {}
+
+/*
+// stderr
+Superclass must be a class.
+[Line 5]
+*/

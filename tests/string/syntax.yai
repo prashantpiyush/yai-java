@@ -1,0 +1,20 @@
+print "str" + "ing";
+print "a string";
+
+print "A~¶Þॐஃ";
+
+var a = "1
+2
+3";
+
+print a;
+
+/*
+// stdout
+string
+a string
+A~¶Þॐஃ
+1
+2
+3
+*/

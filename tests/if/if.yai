@@ -1,0 +1,33 @@
+if(true) if(false) {}
+
+if(true) if(!false) {print 1;}
+
+if(false) if(true) print 2; else print 3;
+
+if(true) if(false) print "no"; else print "bar";
+
+if(0) print 4;
+
+var a = false;
+if(a = true) { print a; }
+
+if(false) print "nope";
+if(nil) print "nope"; else print "go";
+
+if(0) print "yes";
+if(534.532) print "yes";
+if("") print "yes";
+if("foo") print "yes";
+
+/*
+// stdout
+1
+bar
+4
+true
+go
+yes
+yes
+yes
+yes
+*/

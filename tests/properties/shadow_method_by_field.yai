@@ -1,0 +1,26 @@
+class Foo {
+    bar(a) {
+        print "bar";
+        print a;
+    }
+    bat(a) {
+        print "bat";
+        print a;
+    }
+}
+
+var foo = Foo();
+var bar = foo.bar;
+
+foo.bar = foo.bat;
+foo.bar(1);
+
+bar(2);
+
+/*
+// stdout
+bat
+1
+bar
+2
+*/

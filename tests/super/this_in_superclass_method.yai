@@ -1,0 +1,22 @@
+class A {
+    init(a) {
+        this.a = a;
+    }
+}
+
+class B < A {
+    init(a, b) {
+        super.init(a);
+        this.b = b;
+    }
+}
+
+var b = B(1, 2);
+print b.a;
+print b.b;
+
+/*
+// stdout
+1
+2
+*/

@@ -1,0 +1,20 @@
+class A {
+    init(a, b) {
+        print "A " + a + " " + b;
+    }
+}
+
+class B < A {
+    init() {
+        print "B";
+        super.init("a", "b");
+    }
+}
+
+B();
+
+/*
+// stdout
+B
+A a b
+*/

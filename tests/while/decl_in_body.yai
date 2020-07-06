@@ -1,0 +1,6 @@
+while(true) var foo;
+
+/*
+// stderr
+[Line 1] Error at 'var': Expect expression.
+*/

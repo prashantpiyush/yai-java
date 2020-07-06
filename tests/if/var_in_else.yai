@@ -1,0 +1,6 @@
+if(false) 1; else var foo;
+
+/*
+// stderr
+[Line 1] Error at 'var': Expect expression.
+*/

@@ -1,0 +1,13 @@
+class Foo {
+    foo() {
+        print foo;
+    }
+}
+
+Foo().foo();
+
+/*
+// stderr
+Undefined variable 'foo'.
+[Line 3]
+*/

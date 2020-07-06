@@ -1,0 +1,20 @@
+class Foo {
+    init(name) {
+        this.name = name;
+    }
+    sayName() {
+        print this.name;
+    }
+}
+
+var bar = Foo("bar");
+var bat = Foo("bat");
+
+bar.a = bat.sayName;
+
+bar.a();
+
+/*
+// stdout
+bat
+*/

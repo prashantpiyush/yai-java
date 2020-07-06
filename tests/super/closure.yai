@@ -1,0 +1,22 @@
+class A {
+    foo() {
+        return "foo";
+    }
+}
+
+class B < A {
+    getClosure() {
+        fun closure() {
+            return super.foo;
+        }
+        return closure;
+    }
+}
+
+var c = B().getClosure();
+print c()();
+
+/*
+// stdout
+foo
+*/

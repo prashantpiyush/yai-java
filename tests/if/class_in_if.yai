@@ -1,0 +1,6 @@
+if(true) class foo {};
+
+/*
+// stderr
+[Line 1] Error at 'class': Expect expression.
+*/

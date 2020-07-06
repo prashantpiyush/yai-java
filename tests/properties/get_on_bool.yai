@@ -1,0 +1,7 @@
+true.foo;
+
+/*
+// stderr
+Only instances have properties.
+[Line 1]
+*/

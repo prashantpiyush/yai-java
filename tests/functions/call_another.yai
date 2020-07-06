@@ -1,0 +1,23 @@
+fun foo(n) {
+    if(n==0) return "foo";
+    return foo(0);
+}
+
+fun bar(n) {
+    if(n==0) {
+        return "bar" + foo(1) + baz(1);
+    }
+    return bar(0);
+}
+
+fun baz(n) {
+    if(n==0) return "baz";
+    return baz(0);
+}
+
+print bar(1);
+
+/*
+// stdout
+barfoobaz
+*/

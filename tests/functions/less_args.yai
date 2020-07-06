@@ -1,0 +1,11 @@
+fun foo(a, b, c) {
+    // do nothing
+}
+
+foo(1);
+
+/*
+// stderr
+Expected 3 arguments but got 1.
+[Line 5]
+*/

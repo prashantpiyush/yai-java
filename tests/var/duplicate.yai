@@ -1,0 +1,12 @@
+var a = 5;
+var a = 83;
+
+{
+    var b = 35;
+    var b = 353;
+}
+
+/*
+// stderr
+[Line 6] Error at 'b': Variable with this name already declared in this scope.
+*/

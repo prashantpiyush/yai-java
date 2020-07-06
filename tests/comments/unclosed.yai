@@ -1,0 +1,11 @@
+/*
+this is closed
+/*
+*/
+
+/*
+// stderr
+[Line 11] Error : Unclosed comment.
+*/
+
+/*

@@ -1,0 +1,16 @@
+fun f() {
+    for(;;) {
+        var i = "inner";
+        fun g() {
+            print i;
+        }
+        return g;
+    }
+}
+var g = f();
+g();
+
+/*
+// stdout
+inner
+*/

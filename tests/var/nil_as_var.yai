@@ -1,0 +1,6 @@
+var nil = "foo";
+
+/*
+// stderr
+[Line 1] Error at 'nil': Expect variable name.
+*/

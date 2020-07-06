@@ -1,0 +1,6 @@
+if(true) fun foo() {};
+
+/*
+// stderr
+[Line 1] Error at 'fun': Expect expression.
+*/

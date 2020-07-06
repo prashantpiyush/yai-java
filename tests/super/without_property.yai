@@ -1,0 +1,16 @@
+class A {
+    // no methods
+}
+
+class B < A {
+    foo() {
+        super.;
+    }
+}
+
+B().foo();
+
+/*
+// stderr
+[Line 7] Error at ';': Expect superclass method name.
+*/

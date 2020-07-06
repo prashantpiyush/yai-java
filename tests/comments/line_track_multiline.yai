@@ -1,0 +1,25 @@
+// track correct line number after multiline comment
+
+/*
+this is a big
+comment
+random words
+/* this doesn't effect
+
+*/
+
+/*
+*/
+
+/*
+
+
+*/
+
+err; // Undefined
+
+/*
+// stderr
+Undefined variable 'err'.
+[Line 19]
+*/

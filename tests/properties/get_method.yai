@@ -1,0 +1,13 @@
+class Foo {
+    bar(arg) {
+        print arg;
+    }
+}
+
+var bar = Foo().bar;
+bar(1);
+
+/*
+// stdout
+1
+*/

@@ -1,0 +1,42 @@
+class Foo {
+    foo(a, b) {
+        this.a = a;
+        this.b = b;
+    }
+    fooPrint() {
+        print this.a;
+        print this.b;
+    }
+}
+class Bar < Foo {
+    bar(a, b) {
+        this.a = a;
+        this.b = b;
+    }
+    barPrint() {
+        print this.a;
+        print this.b;
+    }
+}
+
+var bar = Bar();
+
+bar.foo(1, 2);
+bar.fooPrint();
+bar.barPrint();
+
+bar.bar(3, 4);
+bar.barPrint();
+bar.fooPrint();
+
+/*
+// stdout
+1
+2
+1
+2
+3
+4
+3
+4
+*/
