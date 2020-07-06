@@ -18,6 +18,9 @@ run: yai
 generate_ast:
 	$(PYTHON) generate_ast.py com/interpreter/yai
 
+test:
+	@ $(PYTHON) test.py
+
 clean:
 	rm -rf $(BUILD_DIR)/*
 

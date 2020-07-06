@@ -1,0 +1,9 @@
+var a = 5;
+a = 63;
+print a;
+
+/*
+// stdout
+63
+// stderr
+*/

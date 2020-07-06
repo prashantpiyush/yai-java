@@ -1,0 +1,16 @@
+class Foo {
+    bar(n) {
+        fun f() {
+            print n;
+        }
+        return f;
+    }
+}
+
+var c = Foo().bar(63);
+c();
+
+/*
+// stdout
+63
+*/

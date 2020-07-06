@@ -1,0 +1,17 @@
+fun f() {
+    var a = 5;
+    var b = "b";
+    fun g() {
+        print b;
+        print a;
+    }
+    return g;
+}
+var x = f();
+x();
+
+/*
+// stdout
+b
+5
+*/

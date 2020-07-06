@@ -1,0 +1,11 @@
+class Foo < Foo {}
+
+{
+    class Bar < Bar {}
+}
+
+/*
+// stderr
+[Line 1] Error at 'Foo': A class cannot inherit from itself.
+[Line 4] Error at 'Bar': A class cannot inherit from itself.
+*/

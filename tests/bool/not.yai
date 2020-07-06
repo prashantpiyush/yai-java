@@ -1,0 +1,12 @@
+print !true;
+print !false;
+print !!true;
+print !!false;
+
+/*
+// stdout
+false
+true
+true
+false
+*/

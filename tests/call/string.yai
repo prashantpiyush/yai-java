@@ -1,0 +1,7 @@
+"a string"();
+
+/*
+// stderr
+Can only call functions and classes.
+[Line 1]
+*/

@@ -1,0 +1,18 @@
+{
+    var a = "outer";
+    fun foo() {
+        {
+            print a;
+            var a = "shadow";
+            print a;
+        }
+        print a;
+    }
+    foo();
+}
+/*
+// stdout
+outer
+shadow
+outer
+*/

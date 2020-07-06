@@ -1,0 +1,18 @@
+var a = "global";
+
+{
+    print a;
+    var a = "local";
+    print a;
+    a = "garbage";
+}
+
+print a;
+
+/*
+// stdout
+global
+local
+global
+// stderr
+*/

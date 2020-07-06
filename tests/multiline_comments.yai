@@ -1,0 +1,16 @@
+
+var a = 5;
+
+/*
+print a;
+*/
+print 
+/* /* print a;
+*/ 
+a;
+
+/*
+// stdout
+5
+// stderr
+*/

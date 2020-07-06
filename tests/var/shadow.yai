@@ -1,0 +1,17 @@
+var a = "before";
+print a;
+
+a = "test";
+print a;
+
+print a = "kick";
+print a;
+
+/*
+// stdout
+before
+test
+kick
+kick
+// stderr
+*/

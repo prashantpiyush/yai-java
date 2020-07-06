@@ -1,0 +1,17 @@
+var a = 1;
+var b = 3;
+var c = "53";
+
+a = b = c;
+
+print a;
+print b;
+print c;
+
+/*
+// stdout
+53
+53
+53
+// stderr
+*/

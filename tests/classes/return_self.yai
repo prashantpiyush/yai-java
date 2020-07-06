@@ -1,0 +1,21 @@
+{
+  class Foo {
+    returnSelf() {
+      return Foo;
+    }
+  }
+  print Foo().returnSelf();
+}
+
+class Foo {
+  returnSelf() {
+    return Foo;
+  }
+}
+print Foo().returnSelf();
+
+/*
+// stdout
+<Foo class>
+<Foo class>
+*/

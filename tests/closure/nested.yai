@@ -1,0 +1,27 @@
+fun foo() {
+    var a = "a";
+    fun bar() {
+        var b = "b";
+        fun baz() {
+            var c = "c";
+            fun kat() {
+                print a;
+                print b;
+                print c;
+            }
+            return kat;
+        }
+        return baz();
+    }
+    return bar();
+}
+
+var f = foo();
+f();
+
+/*
+// stdout
+a
+b
+c
+*/

@@ -1,0 +1,11 @@
+var a = "before";
+var c = a = "var";
+// random comment
+print a;
+print c;
+
+/*
+// stdout
+var
+var
+*/

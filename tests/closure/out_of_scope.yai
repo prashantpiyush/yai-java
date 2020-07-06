@@ -1,0 +1,16 @@
+{
+    var f;
+    {
+        var a = "a";
+        fun foo() {print a;}
+        f = foo;
+    }
+    {
+        var a = "kick";
+        f();
+    }
+}
+/*
+// stdout
+a
+*/

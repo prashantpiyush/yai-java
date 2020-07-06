@@ -1,0 +1,14 @@
+var a = "outer";
+
+{
+  var a = "inner";
+  print a;
+}
+
+print a;
+
+/*
+// stdout
+inner
+outer
+*/

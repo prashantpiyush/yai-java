@@ -1,0 +1,43 @@
+
+class Sup {
+    init() {
+        print "sup init";
+    }
+
+    doprint() {
+        print "chick";
+    }
+}
+
+class Test < Sup {
+    init() {
+        print "init";
+    }
+
+    loop(n) {
+        for(var i = 0; i < n; i = i + 1) {
+            print i;
+        }
+    }
+}
+
+var test = Test();
+test.loop(5);
+test.doprint();
+
+kick = Test();
+
+/*
+// stdout
+init
+0
+1
+2
+3
+4
+chick
+init
+// stderr
+Undefined variable 'kick'.
+[Line 28]
+*/

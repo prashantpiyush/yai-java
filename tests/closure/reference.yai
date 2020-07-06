@@ -1,0 +1,14 @@
+var f;
+{
+    var a = "a";
+    fun foo() {
+        print a;
+    }
+    f = foo;
+}
+f();
+
+/*
+// stdout
+a
+*/

@@ -1,0 +1,9 @@
+var a = 5;
+var b = 6;
+a + b = "33";
+
+/*
+// stdout
+// stderr
+[Line 3] Error at '=': Invalid assignment target.
+*/

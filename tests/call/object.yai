@@ -1,0 +1,11 @@
+class Obj {
+    // empty
+}
+
+Obj()();
+
+/*
+// stderr
+Can only call functions and classes.
+[Line 5]
+*/

@@ -1,0 +1,13 @@
+class A {}
+
+fun foo() {
+    class B < A {}
+    return B;
+}
+
+print foo();
+
+/*
+// stdout
+<B class>
+*/
