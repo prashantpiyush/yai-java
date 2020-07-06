@@ -50,13 +50,6 @@ public class Yai {
             run(bufferedReader.readLine());
             hadError = false;
         }
-
-        // try {
-        // bufferedReader.close();
-        // } catch(Exception exception) {}
-        // try {
-        // inputStreamReader.close();
-        // } catch(Exception exception) {}
     }
 
     private static void run(final String source) {
@@ -80,7 +73,7 @@ public class Yai {
 
     private static void report(int line, String where, String message) {
         System.err.println(
-            "[line " + line + "] Error " + where + ": " + message);
+            "[Line " + line + "] Error " + where + ": " + message);
         hadError = true;
     }
 
@@ -92,7 +85,7 @@ public class Yai {
         if(token.type == TokenType.EOF) {
             report(token.line, " at end", errorMessage);
         } else {
-            report(token.line, "'" + token.lexeme + "'", errorMessage);
+            report(token.line, "at '" + token.lexeme + "'", errorMessage);
         }
     }
 

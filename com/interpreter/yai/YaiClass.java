@@ -45,6 +45,6 @@ class YaiClass implements YaiCallable {
 
     @Override
     public String toString() {
-        return "<class " + name + ">";
+        return "<" + name + " class>";
     }
 }
