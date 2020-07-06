@@ -378,6 +378,10 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         // null is only equal to null
         if(left == null && right == null) return true;
         if(left == null || right == null) return false;
+        // NaN != NaN
+        if(left.equals(Double.NaN) && right.equals(Double.NaN)) {
+            return false;
+        }
         return left.equals(right);
     }
 
