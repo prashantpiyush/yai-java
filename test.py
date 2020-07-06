@@ -22,7 +22,7 @@ class Test:
         self.filepath = filepath
 
         with open(filepath, 'r') as file:
-            code = file.readlines()[:-1]
+            code = file.readlines()
             stdout = False
             stderr = False
             self.expected_stdout = []
@@ -36,8 +36,12 @@ class Test:
                     stderr = True
                     continue
                 if stdout:
+                    if line.startswith('*/'):
+                        break
                     self.expected_stdout.append(line)
                 elif stderr:
+                    if line.startswith('*/'):
+                        break
                     self.expected_stderr.append(line)
     
 
@@ -50,24 +54,25 @@ class Test:
         self.stdout = process.stdout
         self.stderr = process.stderr
         self.passed = False
-        if(self.match('out') and self.match('err')):
+        if self.match(True) and self.match(False):
             self.passed = True
     
 
-    def match(self, check_type):
-        expeced = self.expected_stdout
+    def match(self, is_stdout):
+        expected = self.expected_stdout
         got = self.stdout
-        if check_type == 'err':
-            expeced = self.expected_stderr
+        
+        if not is_stdout:
+            expected = self.expected_stderr
             got = self.stderr
         got = got.strip().split('\n')
 
-        if len(expeced) == 0 and len(got) == 1 and got[0] == '':
+        if len(expected) == 0 and len(got) == 1 and got[0] == '':
             return True
         
-        if(len(expeced) != len(got)): return False
+        if(len(expected) != len(got)): return False
 
-        for e, g in zip(expeced, got):
+        for e, g in zip(expected, got):
             if e.replace('\n', '') != g:
                 return False
         return True
@@ -80,7 +85,7 @@ def main():
     tests = []
     
     # get all the test files and create objects
-    for file in os.listdir(test_directory):
+    for file in sorted(os.listdir(test_directory)):
         base = os.path.join(test_directory, file)
         if os.path.isdir(base):
             for test in os.listdir(base):
@@ -94,11 +99,11 @@ def main():
     for test in tests:
         # print(''.join(test.expected_stdout))
         # print(''.join(test.expected_stderr))
-        print('{0: <40}'.format(test.filepath), sep='', end=' ')
+        print('{0: <45}'.format(test.filepath), sep='', end=' ')
         test.run()
         if test.passed:
             tests_passed += 1
-            green('PASS')
+            green('OK')
         else:
             red('FAIL')
     tests_failed = total_tests - tests_passed
