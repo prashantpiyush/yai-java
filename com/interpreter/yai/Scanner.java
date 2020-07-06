@@ -78,6 +78,7 @@ class Scanner {
                             closed = true;
                             break;
                         }
+                        if(peek() == '\n') ++line;
                         advance();
                     }
                     if(!closed) {
@@ -86,6 +87,7 @@ class Scanner {
                 } else {
                     addToken(TokenType.SLASH);
                 }
+                break;
             case ' ':
             case '\r':
             case '\t':

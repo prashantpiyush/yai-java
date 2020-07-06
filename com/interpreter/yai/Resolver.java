@@ -209,7 +209,7 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
     @Override
     public Void visitSuperExpr(Super expr) {
         if(currentClass == ClassType.NONE) {
-            Yai.error(expr.keyword, "Cannot user 'super' outside of a class.");
+            Yai.error(expr.keyword, "Cannot use 'super' outside of a class.");
         } else if(currentClass != ClassType.SUBCLASS) {
             Yai.error(expr.keyword, "Cannot use 'super' in a class with no superclass.");
         }

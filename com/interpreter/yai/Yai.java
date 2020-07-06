@@ -83,7 +83,7 @@ public class Yai {
 
     static void error(Token token, String errorMessage) {
         if(token.type == TokenType.EOF) {
-            report(token.line, " at end", errorMessage);
+            report(token.line, "at end", errorMessage);
         } else {
             report(token.line, "at '" + token.lexeme + "'", errorMessage);
         }
