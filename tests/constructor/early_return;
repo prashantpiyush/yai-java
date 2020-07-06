@@ -1,0 +1,16 @@
+class Foo {
+    init() {
+        print "init";
+        return;
+        print "don't execute";
+    }
+}
+var foo = Foo();
+print foo.init();
+
+/*
+// stdout
+init
+init
+<Foo instance>
+*/

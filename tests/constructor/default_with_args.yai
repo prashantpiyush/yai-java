@@ -1,0 +1,9 @@
+class Foo {}
+
+Foo(3, 53);
+
+/*
+// stderr
+Expected 0 arguments but got 2.
+[Line 3]
+*/

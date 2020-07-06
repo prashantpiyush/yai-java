@@ -1,0 +1,17 @@
+class Foo {
+    init(a, b) {
+        print "init";
+        this.a = a;
+        this.b = b;
+    }
+}
+var foo = Foo(5, 6);
+print foo.a;
+print foo.b;
+
+/*
+// stdout
+init
+5
+6
+*/

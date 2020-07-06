@@ -1,0 +1,25 @@
+class Foo {
+    init(arg) {
+        print "init";
+        print arg;
+        this.field = "original";
+    }
+}
+var foo = Foo("one");
+foo.field = "two";
+
+// should not create a new instance
+var bar = foo.init("three");
+print bar;
+
+print foo.field;
+
+/*
+// stdout
+init
+one
+init
+three
+<Foo instance>
+original
+*/

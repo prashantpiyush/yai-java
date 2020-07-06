@@ -1,0 +1,15 @@
+class Foo {
+    init() {
+        fun init() {
+            return "bar";
+        }
+        print init();
+    }
+}
+print Foo();
+
+/*
+// stdout
+bar
+<Foo instance>
+*/

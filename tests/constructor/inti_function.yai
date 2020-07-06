@@ -1,0 +1,16 @@
+class Foo {
+    init() {
+        print "initializer";
+    }
+}
+
+fun init() {
+    print "not initializer";
+}
+
+init();
+
+/*
+// stdout
+not initializer
+*/
