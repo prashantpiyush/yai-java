@@ -8,10 +8,10 @@ abstract class Stmt {
         T visitBlockStmt(Block stmt);
         T visitClassStmt(Class stmt);
         T visitExpressionStmt(Expression stmt);
-        T visitPrintStmt(Print stmt);
         T visitFunctionStmt(Function stmt);
-        T visitReturnStmt(Return stmt);
         T visitIfStmt(If stmt);
+        T visitPrintStmt(Print stmt);
+        T visitReturnStmt(Return stmt);
         T visitVarStmt(Var stmt);
         T visitWhileStmt(While stmt);
     }
@@ -59,19 +59,6 @@ abstract class Stmt {
         }
     }
 
-    static class Print extends Stmt {
-        final Expr expression;
-
-        Print(Expr expression) {
-            this.expression = expression;
-        }
-
-        @Override
-        <T> T accept(Visitor<T> visitor) {
-            return visitor.visitPrintStmt(this);
-        }
-    }
-
     static class Function extends Stmt {
         final Token name;
         final List<Token> params;
@@ -89,21 +76,6 @@ abstract class Stmt {
         }
     }
 
-    static class Return extends Stmt {
-        final Token keyword;
-        final Expr value;
-
-        Return(Token keyword, Expr value) {
-            this.keyword = keyword;
-            this.value = value;
-        }
-
-        @Override
-        <T> T accept(Visitor<T> visitor) {
-            return visitor.visitReturnStmt(this);
-        }
-    }
-
     static class If extends Stmt {
         final Expr condition;
         final Stmt thenBranch;
@@ -118,6 +90,34 @@ abstract class Stmt {
         @Override
         <T> T accept(Visitor<T> visitor) {
             return visitor.visitIfStmt(this);
+        }
+    }
+
+    static class Print extends Stmt {
+        final Expr expression;
+
+        Print(Expr expression) {
+            this.expression = expression;
+        }
+
+        @Override
+        <T> T accept(Visitor<T> visitor) {
+            return visitor.visitPrintStmt(this);
+        }
+    }
+
+    static class Return extends Stmt {
+        final Token keyword;
+        final Expr value;
+
+        Return(Token keyword, Expr value) {
+            this.keyword = keyword;
+            this.value = value;
+        }
+
+        @Override
+        <T> T accept(Visitor<T> visitor) {
+            return visitor.visitReturnStmt(this);
         }
     }
 
