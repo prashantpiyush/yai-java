@@ -1,0 +1,21 @@
+print str(1.0) + " = dis";
+
+print "f = " + str(false);
+print "t = " + str(true);
+
+print "nil = " + str(nil);
+
+print "str = " + str(str);
+
+var f = str;
+print f;
+
+/*
+// stdout
+1 = dis
+f = false
+t = true
+nil = nil
+str = <native fn str>
+<native fn str>
+*/

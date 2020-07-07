@@ -41,7 +41,20 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             }
 
             @Override
-            public String toString() { return "<native fn>"; }
+            public String toString() { return "<native fn clock>"; }
+        });
+
+        globals.define("str", new YaiCallable() {
+            @Override
+            public int arity() { return 1; }
+
+            @Override
+            public Object call(Interpreter interpreter, List<Object> arguments) {
+                return stringify(arguments.get(0));
+            }
+
+            @Override
+            public String toString() { return "<native fn str>"; }
         });
     }
 
