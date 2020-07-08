@@ -1,0 +1,24 @@
+fun foo() {
+    var i = 0;
+    
+    while(i <= 5) {
+        i = i + 1;
+        fun g() {
+            print i;
+            continue;
+        }
+        g();
+    }
+}
+
+foo();
+
+/*
+// stdout
+1
+2
+3
+4
+5
+6
+*/

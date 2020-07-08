@@ -1,0 +1,8 @@
+fun foo() {
+    continue;
+}
+
+/*
+// stderr
+[Line 2] Error at 'continue': Cannot continue from top-level code.
+*/

@@ -1,0 +1,6 @@
+continue;
+
+/*
+// stderr
+[Line 1] Error at 'continue': Cannot continue from top-level code.
+*/

@@ -1,0 +1,8 @@
+fun foo() {
+    break;
+}
+
+/*
+// stderr
+[Line 2] Error at 'break': Cannot break from top-level code.
+*/

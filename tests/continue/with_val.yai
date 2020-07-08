@@ -1,0 +1,12 @@
+
+var i = 0;
+while(i<=5) {
+    i = i + 1;
+    continue "bad";
+    print "nope";
+}
+
+/*
+// stderr
+[Line 5] Error at '"bad"': Expect ';' after continue.
+*/

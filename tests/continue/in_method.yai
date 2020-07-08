@@ -1,0 +1,24 @@
+class Foo {
+    init(n, s) {
+        this.n = n;
+        this.s = s;
+    }
+    method() {
+        for(var i=0; i <= this.n; i=i+1) {
+            if(i >= this.s) {
+                continue;
+            }
+            print i;
+        }
+    }
+}
+
+var foo = Foo(5, 3);
+foo.method();
+
+/*
+// stdout
+0
+1
+2
+*/

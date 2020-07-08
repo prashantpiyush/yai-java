@@ -1,0 +1,6 @@
+break;
+
+/*
+// stderr
+[Line 1] Error at 'break': Cannot break from top-level code.
+*/
