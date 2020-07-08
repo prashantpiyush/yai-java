@@ -1,6 +1,7 @@
 package com.interpreter.yai;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,8 @@ import com.interpreter.yai.Expr.This;
 import com.interpreter.yai.Expr.Unary;
 import com.interpreter.yai.Expr.Variable;
 import com.interpreter.yai.Stmt.Block;
+import com.interpreter.yai.Stmt.Break;
+import com.interpreter.yai.Stmt.Continue;
 import com.interpreter.yai.Stmt.Expression;
 import com.interpreter.yai.Stmt.Function;
 import com.interpreter.yai.Stmt.If;
@@ -65,6 +68,9 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
             }
         } catch (RuntimeError error) {
             Yai.runtimeError(error);
+        } catch (FlowControl flowError) {
+            Yai.runtimeError(new RuntimeError(flowError.keyword,
+                "'" + flowError.keyword.lexeme + "' not properly in loop."));
         }
     }
 
@@ -159,9 +165,40 @@ class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     @Override
     public Void visitWhileStmt(While stmt) {
         while(isTruthy(evaluate(stmt.condition))) {
-            execute(stmt.body);
+            try {
+                execute(stmt.body);
+            } catch(FlowControl flowControl) {
+                if(flowControl.keyword.type == TokenType.BREAK) {
+                    break;
+                } else if(flowControl.keyword.type == TokenType.CONTINUE) {
+                    if(stmt.increment != null) {
+                        /*
+                        execute the increment statement after wrapping it in a
+                        block because, if there were no break/continue stmt the
+                        increment statement would be executed inside the while
+                        block and it will maintain the envrionment chain which
+                        resolver assumes.
+                        not running it inside a block will break that assumed
+                        chain length. It won't find the required vars at correct
+                        distance in the environment.
+                        */
+                        execute(new Stmt.Block(Arrays.asList(stmt.increment)));
+                    }
+                    continue;
+                }
+            }
         }
         return null;
+    }
+
+    @Override
+    public Void visitBreakStmt(Break stmt) {
+        throw new FlowControl(stmt.keyword);
+    }
+
+    @Override
+    public Void visitContinueStmt(Continue stmt) {
+        throw new FlowControl(stmt.keyword);
     }
 
     @Override

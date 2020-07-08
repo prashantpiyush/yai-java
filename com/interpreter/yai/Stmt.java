@@ -6,7 +6,9 @@ abstract class Stmt {
 
     interface Visitor<T> {
         T visitBlockStmt(Block stmt);
+        T visitBreakStmt(Break stmt);
         T visitClassStmt(Class stmt);
+        T visitContinueStmt(Continue stmt);
         T visitExpressionStmt(Expression stmt);
         T visitFunctionStmt(Function stmt);
         T visitIfStmt(If stmt);
@@ -29,6 +31,19 @@ abstract class Stmt {
         }
     }
 
+    static class Break extends Stmt {
+        final Token keyword;
+
+        Break(Token keyword) {
+            this.keyword = keyword;
+        }
+
+        @Override
+        <T> T accept(Visitor<T> visitor) {
+            return visitor.visitBreakStmt(this);
+        }
+    }
+
     static class Class extends Stmt {
         final Token name;
         final Expr.Variable superclass;
@@ -43,6 +58,19 @@ abstract class Stmt {
         @Override
         <T> T accept(Visitor<T> visitor) {
             return visitor.visitClassStmt(this);
+        }
+    }
+
+    static class Continue extends Stmt {
+        final Token keyword;
+
+        Continue(Token keyword) {
+            this.keyword = keyword;
+        }
+
+        @Override
+        <T> T accept(Visitor<T> visitor) {
+            return visitor.visitContinueStmt(this);
         }
     }
 
@@ -136,13 +164,23 @@ abstract class Stmt {
         }
     }
 
+    /**
+     * This extra field "increment" will only be used in case of "for" loop.
+     * It is kind of hack to get the "continue" statment working.
+     * This "increment" statment will be executed separately after a "continue"
+     * statement is encountered.
+     * 
+     * This field will be "null" in case of "while" loop.
+     */
     static class While extends Stmt {
         final Expr condition;
         final Stmt body;
+        final Stmt increment;
 
-        While(Expr condition, Stmt body) {
+        While(Expr condition, Stmt body, Stmt increment) {
             this.condition = condition;
             this.body = body;
+            this.increment = increment;
         }
 
         @Override

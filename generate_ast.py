@@ -38,7 +38,14 @@ def define_visitor(file: IO, basename: str, subclasses: Dict[str, List[str]]):
     file.write(f'{TAB}}}\n')
 
 
-def define_subtypes(file: IO, basename: str, subclasses: Dict[str, List[str]]):
+def write_comment(file: IO, comments):
+    file.write(f'{TAB}/**\n')
+    for comment in comments:
+        file.write(f'{TAB} * {comment}\n')
+    file.write(f'{TAB} */\n')
+
+
+def define_subtypes(file: IO, basename: str, subclasses: Dict[str, List[str]], comments=None):
     # define each subclass
     """
     @Override
@@ -46,8 +53,13 @@ def define_subtypes(file: IO, basename: str, subclasses: Dict[str, List[str]]):
         return visitor.vistTypeExpr(this);
     }
     """
+    if comments is None: comments = {}
     for subclass, fields in subclasses.items():
         file.write('\n')
+
+        if subclass in comments:
+            write_comment(file, comments[subclass])
+        
         file.write(f'{TAB}static class {subclass} extends {basename} {{\n')
         
         # fields
@@ -74,7 +86,7 @@ def define_subtypes(file: IO, basename: str, subclasses: Dict[str, List[str]]):
         file.write(f'{TAB}}}\n')
 
 
-def define_ast(output_dir: str, basename: str, subclasses: Dict[str, List[str]]):
+def define_ast(output_dir: str, basename: str, subclasses: Dict[str, List[str]], comments=None):
     filepath = os.path.join(output_dir, basename + '.java')
 
     with open(filepath, 'w') as file:
@@ -85,7 +97,7 @@ def define_ast(output_dir: str, basename: str, subclasses: Dict[str, List[str]])
         file.write(f'abstract class {basename} {{\n')
 
         define_visitor(file, basename, subclasses)
-        define_subtypes(file, basename, subclasses)
+        define_subtypes(file, basename, subclasses, comments)
 
         # base accept() method
         file.write('\n')
@@ -120,14 +132,25 @@ def main():
 
     define_ast(output_dir, 'Stmt', {
         'Block': ['List<Stmt> statements'],
+        'Break': ['Token keyword'],
         'Class': ['Token name', 'Expr.Variable superclass', 'List<Stmt.Function> methods'],
+        'Continue': ['Token keyword'],
         'Expression': ['Expr expression'],
         'Function': ['Token name', 'List<Token> params', 'List<Stmt> body'],
         'If': ['Expr condition', 'Stmt thenBranch', 'Stmt elseBranch'],
         'Print': ['Expr expression'],
         'Return': ['Token keyword', 'Expr value'],
         'Var': ['Token name', 'Expr initializer'],
-        'While': ['Expr condition', 'Stmt body']
+        'While': ['Expr condition', 'Stmt body', 'Stmt increment']
+    }, comments = {
+        'While': [
+            'This extra field "increment" will only be used in case of "for" loop.',
+            'It is kind of hack to get the "continue" statment working.',
+            'This "increment" statment will be executed separately after a "continue"',
+            'statement is encountered.',
+            '',
+            'This field will be "null" in case of "while" loop.'
+        ]
     })
 
 

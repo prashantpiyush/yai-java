@@ -18,6 +18,8 @@ import com.interpreter.yai.Expr.This;
 import com.interpreter.yai.Expr.Unary;
 import com.interpreter.yai.Expr.Variable;
 import com.interpreter.yai.Stmt.Block;
+import com.interpreter.yai.Stmt.Break;
+import com.interpreter.yai.Stmt.Continue;
 import com.interpreter.yai.Stmt.Expression;
 import com.interpreter.yai.Stmt.Function;
 import com.interpreter.yai.Stmt.If;
@@ -31,6 +33,7 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
     private final Stack<Map<String, Boolean>> scopes = new Stack<>();
     private FunctionType currentFunction = FunctionType.NONE;
     private ClassType currentClass = ClassType.NONE;
+    private LoopType currentLoop = LoopType.NONE;
 
     private enum FunctionType {
         NONE,
@@ -43,6 +46,11 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
         NONE,
         CLASS,
         SUBCLASS
+    }
+
+    private enum LoopType {
+        NONE,
+        WHILE
     }
 
     Resolver(Interpreter interpreter) {
@@ -147,8 +155,29 @@ class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
 
     @Override
     public Void visitWhileStmt(While stmt) {
+        LoopType enclosingLoopType = currentLoop;
+        currentLoop = LoopType.WHILE;
+
         resolve(stmt.condition);
         resolve(stmt.body);
+
+        currentLoop = enclosingLoopType;
+        return null;
+    }
+
+    @Override
+    public Void visitBreakStmt(Break stmt) {
+        if(currentLoop == LoopType.NONE) {
+            Yai.error(stmt.keyword, "Cannot break from top-level code.");
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitContinueStmt(Continue stmt) {
+        if(currentLoop == LoopType.NONE) {
+            Yai.error(stmt.keyword, "Cannot continue from top-level code.");
+        }
         return null;
     }
 

@@ -15,6 +15,8 @@ import com.interpreter.yai.Expr.This;
 import com.interpreter.yai.Expr.Unary;
 import com.interpreter.yai.Expr.Variable;
 import com.interpreter.yai.Stmt.Block;
+import com.interpreter.yai.Stmt.Break;
+import com.interpreter.yai.Stmt.Continue;
 import com.interpreter.yai.Stmt.Expression;
 import com.interpreter.yai.Stmt.Function;
 import com.interpreter.yai.Stmt.If;
@@ -121,6 +123,16 @@ class AstPrinter implements Expr.Visitor<String>, Stmt.Visitor<String> {
     @Override
     public String visitWhileStmt(While stmt) {
         return parenthesize2("while", stmt.condition, stmt.body);
+    }
+
+    @Override
+    public String visitBreakStmt(Break stmt) {
+        return "(; break)";
+    }
+
+    @Override
+    public String visitContinueStmt(Continue Stmt) {
+        return "(; continue)";
     }
 
     @Override
