@@ -1,0 +1,12 @@
+class Foo {
+  bar() {
+    super = "value"; // not allowed
+  }
+}
+
+Foo();
+
+/*
+// stderr
+[Line 3] Error at '=': Expect '.' after 'super'.
+*/

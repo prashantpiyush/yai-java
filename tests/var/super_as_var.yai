@@ -1,0 +1,6 @@
+var super = "foo";
+
+/*
+// stderr
+[Line 1] Error at 'super': Expect variable name.
+*/
