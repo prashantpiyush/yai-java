@@ -34,7 +34,7 @@ supported"
 true
 false
 ```
-### nil
+### Nil
 `nil` represents a null value. It is like `null` in Java or `None` in Python. Just the keyword `nil` is sufficient to represent a null value.
 ```
 nil
@@ -53,6 +53,19 @@ var string = "this a str";
 
 var iAnNil;
 var alsoNil = nil;
+```
+
+## Comments
+Yai has single and multiline comments both. Single line comments start with `//`. And, multiline starts with `/*` and ends with `*/`.
+
+```
+// This is a single line comment
+
+var a = 5; // var a stores 5
+
+/*
+ I am a multiline comment.
+*/
 ```
 
 ## Print statement
@@ -295,8 +308,365 @@ for(var i=0; i<3; i=i+1) {
 }
 ```
 
+## Functions
+Functions in Yai can be defined using the keyword `fun`. And, like every other programming language, a function can be called by placing `()` after the function name and passing suitable arguments, if it accepts any.
+
+Since Yai is a dynamically typed language, there is no need to specify a return type when defining a function.
+
+More generally, function declarations have the following components:
+- The `fun` keyword.
+- A function name, an identifier.
+- Comma-separated parameters list in parentheses. Parameters are optional, but parentheses are required.
+- A block as the function's body.
+
+```
+fun foo() {
+    print "in foo";
+}
+foo(); // prints: in fo
+```
+
+Functions can accept parameters also.
+
+```
+fun foo(a, b, c) {
+    print a + b + c;
+}
+foo(1, 2, 10);  // prints: 12
+```
+
+A first-class object is an entity that can be dynamically created, destroyed, passed to a function, returned as a value, and pretty much behaves like any other variable in the language. In Yai, like in Python and JavaScript, functions are considered first-class objects.
+
+```
+// Assign to variables
+fun foo() { print "foo"; }
+
+var bar = foo;
+
+bar();      // prints: foo
+
+
+// Functions can be passed to other functions also
+fun baz(f) {
+    f();
+}
+
+baz(foo);   // prints: foo
+```
+
+They can even be declared inside loops or other functions.
+```
+for(var i = 0; i < 1; i = i + 1) {
+    fun foo() {
+        print "foo";
+    }
+    foo();
+}
+// prints: foo
+
+// But, calling foo outside loop will give error
+// foo is limited to the scope of loop only
+foo();  // error
+```
+
+## Closures
+Yai supports closures. A closure is the combination of a function bundled together with references to its surrounding state. A closure gives you access to an outer function’s scope from an inner function.
+
+This means that the inner function will have access to the variables in the outer function scope, even after the outer function has returned.
+
+A classic example:
+```
+fun addMaker(x) {
+    fun adder(y) {
+        return x + y;
+    }
+    return adder;
+}
+
+var add5 = addMaker(5);
+var add10 = addMaker(10);
+
+print add5(12);     // 17
+print add10(8);     // 18
+```
+
+Closures only capture variables that are visible to their declaration, meaning they are lexically scoped. They run in the scope in which they are defined, not the scope from which they are executed. Thus, we can view closures as a combination of function definitions and the scope chain that was in effect when the function was defined.
+
+```
+var a = "outer";
+fun foo() {
+    var a = "inner";
+    
+    fun bar() {
+        print a;
+    }
+
+    return bar;
+}
+
+var f = foo();
+f();    // prints: innner
+```
+
+In the above example, only the inner variable is visible to the `bar` function, since it is shadowing the outer one. Due to this, the bar function forms a closure over the inner variable and stores a reference and, prints it when called.
+
+```
+var a = "global";
+{
+    fun assign() {
+        a = "assigned";
+    }
+
+    var a = "inner";
+    assign();
+    print a;    // prints: inner
+}
+print a;        // prints: assigned
+```
+
+Many functions can be nested to create closures.
+
+```
+// 
+fun foo() {
+    var a = "a";
+    fun bar() {
+        var b = "b";
+        fun baz() {
+            var c = "c";
+            fun bat() {
+                print a + " " + b + " " + c;
+            }
+            return bat;
+        }
+        return baz();
+    }
+    return bar();
+}
+foo()();    // prints: a b c
+```
+
+## Classes
+Object-Oriented Programming is a concept to bundle data and functionalities together. Languages that support OOP typically use inheritance for code reuse and follow either class-based or prototype-based programming style. And, Yai has classes. Classes are a nice way to create new namespaces and avoid clashes in the global scope. Creating a new class creates a new type of object, allowing new instances of that type to be made. Each instance has fields and methods attached to maintain and modify its state.
+
+### Class definition syntax
+Class definitions, like function definitions, must be executed before they have any effect. And, a class definition can be placed anywhere, like inside a function on in a while loop.
+
+When creating a new class, a class-name must be preceded by the `class` keyword and followed by a block that only contains method definition.
+
+```
+class Foo {
+    // empty block
+}
+```
+
+Methods are not that different from functions. They just don't require the `fun` keyword. Since a class definition can only contain methods, it is assumed that all the substatements are going to be function definitions.
+
+```
+class Bar {
+    methodLikeThis() {
+        // do something
+    }
+
+    methodWithParams(a, b, c) {
+        // do something else
+    }
+}
+```
+
+### Class objects
+To instantiate a class, Yai uses function notation like Python and JS. Just pretend that the class object is a function that returns a new instance of that class.
+
+```
+class Foo {
+    // methods go here
+}
+
+var fooObject = Foo();
+```
+
+### Constructor
+A class can define its own `init` method that will be invoked every time a new object of that class is created.
+
+```
+class Foo {
+    init() {
+        print "in Foo init";
+    }
+}
+
+var fooObject = Foo();
+// prints: in Foo init
+```
+
+The constructor function can also accept arguments required to initiate a class. And, these arguments are passed to the class while instantiating.
+
+```
+class Foo {
+    init(param) {
+        print "foo: " + param;
+    }
+}
+
+Foo("obj");
+// prints: foo: obj
+```
+
+### Keyword `this`
+Instantiating a class creates an empty object, without any state. Classes can be instantiated with a default state by setting proper fields in the constructor method. Within a method, including constructor, `this` is a reference to the current object - the object whose method or constructor is being called. The constructor can use `this` to set attributes on the current object.
+
+```
+class Person {
+    init(name) {
+        this.name = name;
+    }
+
+    ...
+}
+
+var hito = Person("hito");
+```
+
+### Access instance properties
+Any field or method on an instance can be accessed by placing dot `.` after the object and then the property name.
+
+When looking for a property, Yai will first look for fields with the given name and then for a method. If a field and method have the same name, then the field will overshadow the method.
+
+```
+class Person {
+    init(name) {
+        this.name = name;
+    }
+
+    sayHello() {
+        print "Hello " + this.name;
+    }
+}
+
+var hito = Person("hito");
+
+// Instance methods can be called like this
+hito.sayHello();    // prints: Hello hito
+
+
+// Access attributes like this
+print hito.name;    // prints: hito
+
+
+// Methods can be assigned to other variables and then called
+var hello = hito.sayHello;
+
+hello();            // prints: Hello hito
+```
+
+Inside a method body, a `this` expression evaluates to the instance that the method was called on. More specifically, since the methods are accessed and invoked as a two-step process, `this` will refer to the object that the method was accessed from.
+
+```
+class Foo {
+    init(value) {
+        this.value = value;
+    }
+    method() {
+        print this.value;
+    }
+}
+
+class Bar {
+    init(value) {
+        this.value = value;
+    }
+    method() {
+        print this.value;
+    }
+}
+
+var foo = Foo("foo");
+var bar = Bar("bar");
+
+bar.method = foo.method;
+
+bar.method();   // prints: foo
+```
+
+### Inheritance
+In Yai, like other OOP languages, classes can be derived from other classes, thereby inheriting methods.
+
+```
+class Foo {
+    printFoo() {
+        print "foo";
+    }
+}
+
+class Bar < Foo {}
+
+var bar = Bar();
+
+// bar inheris Foo's printFoo function
+bar.printFoo();
+```
+
+### Keyword `super`
+The use of a `super` keyword is to access the superclass's method from a subclass. If a method overrides one of its superclass's method, then the overridden method can be invoked using the `super` keyword.
+
+Only methods from a superclass can be accessed using `super`.
+
+```
+class Foo {
+    method() {
+        print "foo";
+    }
+}
+
+class Bar < Foo {
+    method() {
+        super.method();
+        print "bar";
+    }
+}
+
+Bar().method();
+// prints:
+// foo
+// bar
+```
+
+To understand how `super` works, consider the following example. An equivalent program in Java or C++ would print "A.method", and that is what Yai does.
+
+```
+class A {
+    method() {
+        print "A.method";
+    }
+}
+
+class B < A {
+    method() {
+        print "B.method";
+    }
+
+    test() {
+        super.method();
+    }
+}
+
+class C < B {}
+
+C().test();     // prints: A.method
+```
+
+The `super` keyword, followed by a dot and an identifier looks for a method with that name. Unlike calls on `this`, the search starts at the superclass containing the super expression.
+
+## In-built function `str()`
+The `str` function accepts only one argument and returns the string representation of the passed variable.
+
+```
+print "str = " + str(str);
+// str = <native fn str>
+```
+
 ## Grammar
-**Vocab: **
+<b>Vocab:</b>
 - Rules are called production because they produce string which follows the grammar
 - Terminal: A literal value. It is called so because they don't have any more rules as they subexpression.
 - Non-Terminal: Named reference to another rule in the grammar.
