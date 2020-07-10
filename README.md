@@ -277,19 +277,6 @@ while(i < 3) {
     print i;
     i = i + 1;
 }
-
-var i = 0;
-while(i < 3) {
-    i = i + 1;
-    continue;
-    print "nope";
-}
-
-var i = 0;
-while(i < 3) {
-    break;
-    print "nope";
-}
 ```
 
 ### for
@@ -297,9 +284,28 @@ while(i < 3) {
 for(var i=0; i<3; i=i+1) {
     print i;
 }
+```
+
+### `break`
+```
+var i = 0;
+while(i < 3) {
+    break;
+    print "nope";
+}
 
 for(var i=0; i<3; i=i+1) {
     if(i>1) break;
+}
+```
+
+### `continue`
+```
+var i = 0;
+while(i < 3) {
+    i = i + 1;
+    continue;
+    print "nope";
 }
 
 for(var i=0; i<3; i=i+1) {
